@@ -14694,16 +14694,17 @@ module.hot.accept(reloadCSS);
 var _leaflet = _interopRequireDefault(require("leaflet"));
 require("./styles.css");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var getFeature = function getFeature(feature, layer) {
+  if (!feature.properties.nimi) return;
+  var name = feature.properties.nimi;
+  layer.bindTooltip(name).openTooltip();
+};
 fetch("https://geo.stat.fi/geoserver/wfs?service=WFS&version=2.0.0&request=GetFeature&typeName=tilastointialueet:kunta4500k&outputFormat=json&srsName=EPSG:4326").then(function (response) {
   return response.json();
 }).then(function (data) {
-  console.log(data);
+  //console.log(data);
+
   var map = _leaflet.default.map('map').setView([61.05, 28.1], 14);
-  var getFeature = function getFeature(feature, layer) {
-    if (!feature.properties.nimi) return;
-    var name = feature.properties.nimi;
-    layer.bindToolTip(name);
-  };
   var geojson = _leaflet.default.geoJSON(data, {
     onEachFeature: getFeature,
     style: {
