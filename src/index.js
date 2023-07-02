@@ -31,7 +31,6 @@ const getFeature = (feature, layer) => {
   if (!feature.properties.nimi) return;
   const name = feature.properties.nimi;
   
-  layer.bindPopup(name);
   layer.bindTooltip(name);
 };
 

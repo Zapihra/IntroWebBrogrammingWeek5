@@ -14736,7 +14736,6 @@ var mapping = /*#__PURE__*/function () {
 var getFeature = function getFeature(feature, layer) {
   if (!feature.properties.nimi) return;
   var name = feature.properties.nimi;
-  layer.bindPopup(name);
   layer.bindTooltip(name);
 };
 mapping();
