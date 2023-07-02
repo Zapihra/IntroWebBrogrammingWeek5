@@ -1,10 +1,31 @@
+import L from "leaflet";
 import "./styles.css";
 
-document.getElementById("app").innerHTML = `
-<h1>Hello Vanilla!</h1>
-<div>
-  We use the same configuration as Parcel to bundle this sandbox, you can find more
-  info about Parcel 
-  <a href="https://parceljs.org" target="_blank" rel="noopener noreferrer">here</a>.
-</div>
-`;
+fetch("https://geo.stat.fi/geoserver/wfs?service=WFS&version=2.0.0&request=GetFeature&typeName=tilastointialueet:kunta4500k&outputFormat=json&srsName=EPSG:4326")
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);
+
+    let map = L.map('map').setView([61.05, 28.1], 14);
+
+    const getFeature = (feature, layer) => {
+      if (!feature.properties.nimi) return;
+      const name = feature.properties.nimi;
+      layer.bindToolTip(name);
+    }
+
+    let geojson = L.geoJSON(data, {
+      onEachFeature: getFeature,
+      style: {weight: 3}
+    }).addTo(map);
+
+
+    let osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      minZoom: -3,
+      attribution: "© OpenStreetMap"
+    }).addTo(map);
+
+    map.fitBounds(geojson.getBounds());
+    
+  })
+
